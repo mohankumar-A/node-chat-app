@@ -36,8 +36,6 @@ socket.on("connect", function() {
 });
 
 socket.on("newMessage", function(message){
-    console.log(message);
-
     var template = $("#message-template").html();
 
     var html = Mustache.render(template, {
@@ -57,8 +55,8 @@ socket.on("newLocationMessage", function(message){
 
     var html = Mustache.render(template, {
        from: message.from,
-        createdAt: new moment(message.createdAt).format("h:mm a"),
-        url: message.url
+       createdAt: new moment(message.createdAt).format("h:mm a"),
+       url: message.url
     });
     $("#messages").append(html);
     // var li = $("<li></li>");
