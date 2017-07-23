@@ -7,7 +7,8 @@ socket.on("newMessage", function(message){
     console.log(message);
     var li = $("<li></li>");
     //li.text(`${message.from}: ${message.text}`);
-    li.text(message.from+ ": " +message.text);
+    var timeStamp = new moment(message.createdAt);
+    li.text(message.from+ " " + timeStamp.format("h:mm a") + ": " +message.text);
     $("#messages").append(li);
 });
 
@@ -16,7 +17,8 @@ socket.on("newLocationMessage", function(location){
     console.log(location);
     var li = $("<li></li>");
     var a = $("<a target='_blank'>My Current Location</a>");
-    li.text(location.from + ":");
+    var timeStamp = new moment(location.createdAt);
+    li.text(location.from + " " + timeStamp.format("h:mm a") + ":");
     a.attr("href", location.url);
     li.append(a);
     $("#messages").append(li);
