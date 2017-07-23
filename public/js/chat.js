@@ -12,12 +12,27 @@ function scrollToBottom(){
   if(clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight){
       messages.scrollTop(scrollHeight);
   }
-
 };
+
+socket.on("updateUserList", function(users){
+    console.log(users);
+    var template = $("#users-template").html();
+
+    var html = Mustache.render(template, {users:users});
+    $("#users").html(html);
+});
 
 
 socket.on("connect", function() {
-    console.log("connected to server");
+    var params = $.deparam(window.location.search);
+    socket.emit("join", params, function(err){
+        if(err){
+            alert(err);
+            window.location.href = "/"
+        } else {
+            console.log("Join Room Success");
+        }
+    });
 });
 
 socket.on("newMessage", function(message){
