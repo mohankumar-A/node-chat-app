@@ -18,10 +18,12 @@ io.on("connection", (socket)=>{
 
    socket.broadcast.emit("newMessage", generateMessage("admin", "New user joined"));
 
-   socket.on("createMessage", function(message){
+   socket.on("createMessage", function(message, callback){
       let date = new Date();
       message.createdAt = date.getTime();
       console.log(message);
+
+      callback("This is from server");
 
       io.emit("newMessage", {
           from: message.from,
