@@ -5,7 +5,7 @@ const express = require("express");
 const publicPath = path.join(__dirname, "../public");
 const app = express();
 const server = http.createServer(app);
-const {generateMessage} = require("./utils/message");
+const {generateMessage, generateLocationMessage} = require("./utils/message");
 const port = process.env.PORT || 3000;
 let io = socketIO(server);
 
@@ -21,28 +21,14 @@ io.on("connection", (socket)=>{
    socket.on("createMessage", function(message, callback){
       let date = new Date();
       message.createdAt = date.getTime();
-      console.log(message);
-
-      callback("This is from server");
-
-      io.emit("newMessage", {
-          from: message.from,
-          text: message.text,
-          createdAt: message.createdAt
-      });
-
-       // socket.broadcast.emit("newMessage", {
-       //    from: message.from,
-       //    text: message.text,
-       //    createdAt: message.createdAt
-       // });
+      console.log("Createmessage: ", message);
+      io.emit("newMessage", generateMessage(message.from, message.text));
+       callback("This is from server");
    });
 
-   // socket.emit("newMessage", {
-   //    from: "abc@example.com",
-   //     text: "hey this is another test test",
-   //     createdAt: new Date().getTime()
-   // });
+   socket.on("createLocationMessage", (coords) => {
+      io.emit("newLocationMessage", generateLocationMessage("admin", coords.latitude, coords.longitude));
+   });
 
    socket.on("disconnect", ()=>{
       console.log("client disconnected from server");
